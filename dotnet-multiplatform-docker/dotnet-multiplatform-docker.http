@@ -1,0 +1,6 @@
+@dotnet_multiplatform_docker_HostAddress = http://localhost:5047
+
+GET {{dotnet_multiplatform_docker_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

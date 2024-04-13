@@ -4,6 +4,7 @@ USER $APP_UID
 
 # windows-specific base
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-ltsc2022 AS base-windows
+ENV PATH="%PATH%;C:\\Program Files\\dotnet"
 
 # linux only build and publish
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build

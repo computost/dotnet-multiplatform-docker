@@ -7,7 +7,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-ltsc2022 AS base-windows
 #platform dynamic base
 FROM base-${TARGETOS} AS base
 USER $APP_UID
-WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
@@ -27,5 +26,6 @@ RUN dotnet publish "dotnet-multiplatform-docker.csproj" -c $BUILD_CONFIGURATION 
 
 # final
 FROM base AS final
+WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "dotnet-multiplatform-docker.dll"]

@@ -1,14 +1,9 @@
 ﻿# linux-specific base
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base-linux
+USER $APP_UID
 
 # windows-specific base
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-ltsc2022 AS base-windows
-
-#platform dynamic base
-FROM base-${TARGETOS} AS base
-USER $APP_UID
-EXPOSE 8080
-EXPOSE 8081
 
 # linux only build and publish
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -24,8 +19,10 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "dotnet-multiplatform-docker.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# final
-FROM base AS final
+# platform-dynamic final
+FROM base-${TARGETOS} AS final
+EXPOSE 8080
+EXPOSE 8081
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "dotnet-multiplatform-docker.dll"]

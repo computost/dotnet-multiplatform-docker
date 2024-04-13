@@ -4,6 +4,8 @@ USER $APP_UID
 
 # windows-specific base
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-ltsc2022 AS base-windows
+# system PATH mysteriously doesn't work in nanoserver after publishing
+# so we add dotnet to the user path as a workaround
 ENV PATH="%PATH%;C:\\Program Files\\dotnet"
 
 # linux only build and publish
